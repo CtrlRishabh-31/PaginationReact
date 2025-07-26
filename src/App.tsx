@@ -40,7 +40,7 @@ const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
-  const [totalPages, setTotalPages] = useState<number>(0);
+
 
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
@@ -49,7 +49,7 @@ const App: React.FC = () => {
 
   const toastRef = useRef<Toast>(null);
 
-  const fetchData = async (page: number, rows: number) => {
+  const fetchData = async (page: number, rows: number): Promise<ApiResponse> => {
     const url = `https://api.artic.edu/api/v1/artworks?page=${page + 1}&limit=${rows}&fields=id,title,place_of_origin,artist_display,inscriptions,date_start,date_end`;
     const res = await fetch(url);
     if (!res.ok) {
@@ -67,7 +67,7 @@ const App: React.FC = () => {
       setCurrentPage(page);
       setPageSize(rows);
       setTotalRecords(data.pagination.total);
-      setTotalPages(data.pagination.total_pages);
+    
       updateSelectAllStatus(data.data);
     } catch (err) {
       console.error('Error loading data:', err);
